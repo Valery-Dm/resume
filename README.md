@@ -1,3 +1,3 @@
-#My resume. English version
+# My resume. English version
 
-Basic from-end combo used: HTML, CSS, JS (jQery).
+Basic front-end combo used: HTML, CSS, JS (jQuery).
