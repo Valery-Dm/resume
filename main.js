@@ -16,7 +16,7 @@ $(document).ready(function() {
       resetActiveMenu,
       windowResized = false;
   // Initialize menu on document open
-  setActiveMenu();
+  $(this).scrollTop(0);
   // Track window resizing events as we might need
   // to recalculate scrollPositions after that
   $(window).resize(function() {
