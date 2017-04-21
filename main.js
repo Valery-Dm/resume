@@ -12,10 +12,11 @@ $(document).ready(function() {
       currentId = 0,
       currentPosTop = scrollPositions[currentId],
       currentPosBottom = getPosBottom(currentId),
-      isPageEndReached,
-      resetActiveMenu,
+      animationDelay = 300,
+      lastSectionThreshold = 50,
+      topEdgeCorrection = 20,
       windowResized = false;
-  // Initialize menu on document open
+  // Go to the top on document open
   $(this).scrollTop(0);
   // Track window resizing events as we might need
   // to recalculate scrollPositions after that
@@ -24,12 +25,11 @@ $(document).ready(function() {
   });
   // Scroll on click
   menuItems.click(function(e) {
-    "use strict";
     var href = $(this).attr("href"),
       offset = $(href).offset().top;
     $('html, body').stop().animate({
       scrollTop: offset
-    }, 300);
+    }, animationDelay);
     e.preventDefault();
   });
   // Track scrolling
@@ -38,17 +38,17 @@ $(document).ready(function() {
   });
   // Bootstrap helper to really collapse 'collapsed' menu after click.
   // It is strange that so desireable function has no Bootstrap support.
-  $(window).click('.in',function(e) {
-      if( $(e.target).is('a') ) {
-          $('.in').attr("aria-expanded", "false");
-          $('.in').removeClass("in");
-      }
+  $(window).click('.in', function(e) {
+    if($(e.target).is('a')) {
+        $('.in').attr("aria-expanded", "false");
+        $('.in').removeClass("in");
+    }
   });
   /**
   * Set new menu item as Active based on current Window position
   */
   function setActiveMenu() {
-    "use strict";
+    var i;
     if (windowResized) {
       // reset after possible window resize
       scrollPositions = getScrollPositions();
@@ -64,13 +64,11 @@ $(document).ready(function() {
     // explicitly set last section (as it has small height
     // and can't be selected otherwise inside a big window)
     else if (isPageEndReached(topEdge + $(window).height())) {
-      //debugger;
       setNewPosition(lastId);
     }
     // Going or scrolling down
     else if (topEdge > currentPosBottom) {
-      //debugger;
-      for (var i = currentId; i < scrollPositions.length; i++) {
+      for (i = currentId; i < scrollPositions.length; i++) {
         // we are looking for bottom edge here
         if (topEdge < getPosBottom(i)) {
           setNewPosition(i);
@@ -80,25 +78,24 @@ $(document).ready(function() {
     }
     // Going up
     else if (topEdge < currentPosTop) {
-      //debugger;
-      for (var i = currentId; i >= 0; i--) {
-        // Is Window's top edge above the section's top?
+      for (i = currentId; i >= 0; i--) {
+        // is Window's top edge below this section's top?
         if (topEdge > scrollPositions[i]) {
           setNewPosition(i);
           return;
         }
       }
     }
-  };
+  }
 
   /**
   * The new section will be active and selected
   */
   function setNewPosition(newId) {
     resetActiveMenu(newId);
-    currentPosTop = scrollPositions[currentId] - 20;
+    currentPosTop = scrollPositions[currentId] - topEdgeCorrection;
     currentPosBottom = getPosBottom(currentId);
-  };
+  }
 
   /**
   * Return collection of top edge offsets for all sections
@@ -107,7 +104,7 @@ $(document).ready(function() {
     return sectionIds.map(function() {
             return $(this).offset().top;
           });
-  };
+  }
 
   /**
   * Remove Active status from currently selected item
@@ -117,7 +114,7 @@ $(document).ready(function() {
     $(menuItems[currentId]).parent().removeClass("active");
     currentId = newId;
     $(menuItems[currentId]).parent().addClass("active");
-  };
+  }
 
   /**
   * Return true when scrolling reached window bottom
@@ -125,20 +122,21 @@ $(document).ready(function() {
   function isPageEndReached(currentHeight) {
     return currentId == preLastId &&
            currentHeight >= $(document).height();
-  };
+  }
 
   /**
-  * Threshold for the last section to stay active a bit
+  * Threshold for the last section to stay active a little bit
   */
   function isThreshold(topEdge) {
-    return topEdge + $(window).height() + 50 > $(document).height();
+    return topEdge + $(window).height() + lastSectionThreshold > $(document).height();
   }
   /**
   * Get bottom edge of a section with given id
-  * or the window bottom for the last section
+  * (which is the top edge of next section)
+  * or the window's bottom for the last section
   */
   function getPosBottom(id) {
     return ++id < scrollPositions.length ?
           scrollPositions[id] : $(document).height();
-  };
+  }
 });
