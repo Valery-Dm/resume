@@ -36,7 +36,14 @@ $(document).ready(function() {
   $(window).scroll(function() {
     setActiveMenu();
   });
-
+  // Bootstrap helper to really collapse 'collapsed' menu after click.
+  // It is strange that so desireable function has no Bootstrap support.
+  $(window).click('.in',function(e) {
+      if( $(e.target).is('a') ) {
+          $('.in').attr("aria-expanded", "false");
+          $('.in').removeClass("in");
+      }
+  });
   /**
   * Set new menu item as Active based on current Window position
   */
