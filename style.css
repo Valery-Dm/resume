@@ -1,0 +1,44 @@
+body {
+	padding-top: 40px;
+	font-family: "Roboto", "Arial";
+}
+a, a:active, a:hover, a:visited {
+	color: black;
+  text-decoration: none;
+}
+p {
+	padding: 10px;
+}
+*[id]:before {
+  display: block;
+  content: " ";
+  margin-top: -80px;
+  height: 80px;
+  visibility: hidden;
+}
+#my-photo {
+	border: 5px solid Gainsboro;
+	margin: 0 auto;
+	border-radius: 50%;
+}
+.social-networks {
+	margin: 30px auto;
+}
+.social-link {
+	padding: 5px;
+	text-decoration: none !important;
+}
+.container {
+	margin-top: 60px;
+}
+.section-cap {
+	color: graytext;
+	margin-bottom: 20px;
+}
+.line {
+	margin: 40px 30%;
+}
+.portfolio-pic {
+	height: auto;
+	width: 400px;
+}
