@@ -3,12 +3,16 @@ body {
 	font-family: "Roboto", "Arial";
 }
 a, a:active, a:hover, a:visited {
-	color: black;
+	color: indigo;
   text-decoration: none;
 	outline:none;
 }
 p {
 	padding: 10px;
+}
+th{
+	text-align: center;
+	font-weight: bold;
 }
 *[id]:before {
   display: block;
